@@ -1,11 +1,20 @@
 import requests
+from requests.auth import HTTPProxyAuth
+import re
 
 # Fungsi untuk memeriksa proxy
 def check_proxy(proxy):
+    # Tentukan apakah proxy adalah SOCKS atau HTTP/HTTPS
+    if proxy.startswith('socks'):
+        proxy_type = 'socks'
+    else:
+        proxy_type = 'http'
+
     proxies = {
         'http': proxy,
         'https': proxy,
     }
+
     try:
         print(f"Menguji proxy: {proxy}")  # Debugging line
         response = requests.get('https://www.google.com', proxies=proxies, timeout=5)
