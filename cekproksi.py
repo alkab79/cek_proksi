@@ -40,12 +40,13 @@ def read_proxies_from_file(file_path):
         print(f"Kesalahan saat membaca file {file_path}: {e}")
         return []
 
-# Menulis hasil ke file
+# Menulis hasil ke file (hanya proxy yang aktif)
 def write_results_to_file(results, file_path):
     try:
         with open(file_path, 'w') as file:
             for proxy, status in results:
-                file.write(f"Proxy {proxy} - {status}\n")
+                if status == "Proxy aktif":
+                    file.write(f"Proxy {proxy} - {status}\n")
         print(f"Hasil ditulis ke {file_path}")  # Debugging line
     except Exception as e:
         print(f"Kesalahan saat menulis file {file_path}: {e}")
@@ -58,4 +59,5 @@ for proxy in proxy_list:
     status = check_proxy(proxy)
     results.append((proxy, status))
 
+# Hanya menyimpan proxy yang aktif
 write_results_to_file(results, 'proxy_status.txt')
