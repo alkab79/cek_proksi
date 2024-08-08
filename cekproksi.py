@@ -1,6 +1,5 @@
 import requests
 from requests.auth import HTTPProxyAuth
-import re
 
 # Fungsi untuk memeriksa proxy
 def check_proxy(proxy):
@@ -51,6 +50,28 @@ def write_results_to_file(results, file_path):
     except Exception as e:
         print(f"Kesalahan saat menulis file {file_path}: {e}")
 
+# Mengonversi proxy ke format yang diinginkan
+def convert_proxy_format(proxy):
+    if proxy.startswith('socks'):
+        if 'socks5' in proxy:
+            return f"socks5://{proxy.split('socks5://')[1]}"
+        elif 'socks4' in proxy:
+            return f"socks4://{proxy.split('socks4://')[1]}"
+    else:
+        return f"http://{proxy.split('http://')[1]}"
+
+# Menulis hasil ke file lain dalam format yang diinginkan
+def write_formatted_proxies_to_file(results, file_path):
+    try:
+        with open(file_path, 'w') as file:
+            for proxy, status in results:
+                if status == "Proxy aktif":
+                    formatted_proxy = convert_proxy_format(proxy)
+                    file.write(f"{formatted_proxy}\n")
+        print(f"Hasil format proxy ditulis ke {file_path}")  # Debugging line
+    except Exception as e:
+        print(f"Kesalahan saat menulis file {file_path}: {e}")
+
 # Main
 proxy_list = read_proxies_from_file('proxy_list.txt')
 
@@ -61,3 +82,6 @@ for proxy in proxy_list:
 
 # Hanya menyimpan proxy yang aktif
 write_results_to_file(results, 'proxy_status.txt')
+
+# Menulis proxy aktif dalam format yang diinginkan
+write_formatted_proxies_to_file(results, 'formatted_proxy_list.txt')
