@@ -16,7 +16,7 @@ def check_proxy(proxy):
 
     try:
         print(f"Menguji proxy: {proxy}")  # Debugging line
-        response = requests.get('https://api.bigdatacloud.net', proxies=proxies, timeout=2)
+        response = requests.get('https://api.bigdatacloud.net', proxies=proxies, timeout=3)
         if response.status_code == 200:
             return "Proxy aktif"
         else:
